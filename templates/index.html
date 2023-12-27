@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Anniversary App</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: {% if prediction == 1 %} #7ff172; /* Green */
+                                 {% elif prediction == 0 %} #f47878; /* Red */
+                                 {% else %} #ffffff; /* White */
+                                 {% endif %};
+
+            }
+
+            .header {
+                text-align: center;
+                background-color: #3d3f3d; /* Darker color for header */
+                color: #ffffff;
+                padding: 20px;
+            }
+
+            .form-container {
+                text-align: center;
+                margin: 50px auto;
+                max-width: 400px;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+            }
+
+            .fileName {
+                margin-bottom: 10px;
+            }
+
+            label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+
+            .submit-button, .retry-button {
+                background-color: #5a2ed0;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                transition-duration: 0.4s;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            .submit-button:hover, .retry-button:hover {
+                background-color: #4825a8;
+            }
+
+            .outcome-text {
+                font-size: 24px;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+
+            .predictions-table {
+                margin: 20px auto;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .predictions-table th, .predictions-table td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            .predictions-table th {
+                background-color: #5a2ed0;
+                color: white;
+            }
+            .image-upload-container {
+                margin-top: 20px;
+            }
+
+            .choose-image-button {
+                background-color: #5a2ed0;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                transition-duration: 0.4s;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            .choose-image-button:hover {
+                background-color: #4825a8;
+            }
+
+            .uploaded-image {
+                max-width: 100%;
+                max-height: 300px;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="header">
+            <h1>Rafa Authentication App !!</h1>
+        </div>
+
+        <div class="form-container">
+            <form action='/' method="post" enctype="multipart/form-data">
+                <label class="choose-image-button" for="imagefile">Choose an image</label>
+                <input type="file" id="imagefile" name="imagefile" accept="image/*">
+                <br>
+                <div class="fileName" id="fileName">No file chosen</div>
+                <div class="image-upload-container">
+                    <img id="uploadedImage" class="uploaded-image" src="" alt="Uploaded Image">
+                </div>
+                <button type="submit" class="submit-button">Predict Image</button>
+            </form>
+
+            {% if prediction == 1 %}
+                <p class="outcome-text">YOU ARE RAFA YEY :D</p>
+            {% elif prediction == 0 %}
+                <p class="outcome-text">YOU ARE NOT RAFA :(</p>
+            {% else %}
+                <p class="outcome-text">Waiting input</p>
+            {% endif %}
+
+            {% if prediction == 1 or prediction == 0 %}
+                <form action='/retry' method="get">
+                    <button type="submit" class="retry-button">Retry</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <script>
+            // JavaScript to display the uploaded image and file name
+            document.getElementById('imagefile').addEventListener('change', function() {
+                var fileName = this.files[0].name;
+                document.getElementById('fileName').innerText = 'Selected file: ' + fileName;
+
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('uploadedImage').src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+        </script>
+    </body>
+</html>
